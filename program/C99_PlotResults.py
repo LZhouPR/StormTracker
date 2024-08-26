@@ -81,7 +81,7 @@ for time in time_range:
         lat_p = row['lat']
         p_cent = row['p_cent']
         if ~np.isnan(p_cent):
-            ax.text(lon_p+0.5, lat_p+0.2, round(p_cent/100), transform=ccrs.PlateCarree())
+            ax.text(lon_p+0.5, lat_p+0.2, round(p_cent), transform=ccrs.PlateCarree())
     time_str = pd.to_datetime(time).strftime("%Y-%m-%d %H")
     ax.set_title(time_str)
     # time_str = time.strftime('%Y-%m-%d %H')
