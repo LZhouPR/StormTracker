@@ -1,6 +1,7 @@
 from datetime import date, timedelta
 import numpy as np
 import pandas as pd
+import CycloneModule_13_2 as md
 '''*******************************************
 nc file variables you need to change
 *******************************************'''
@@ -14,7 +15,7 @@ timestep = 3 # in hours
 # Time Variables
 ystart, yend = 2023, 2023
 mstart, mend = 8, 9
-dstart, dend = 20, 5
+dstart, dend = 20, 4
 
 # spatial resolution of the gridded data
 # xsize, ysize = 25000, -25000 # in meters
@@ -132,7 +133,7 @@ xsize, ysize = spres * 1000, spres * 1000
 starttime = [ystart, mstart, dstart, 0, 0, 0] # Format: [Y,M,D,H,M,S]
 enddate = date(yend, mend, dend) + timedelta(days=1)
 endtime = [enddate.year, enddate.month, enddate.day, 0, 0, 0]
-endtime_nextmonth = [yend, mend+1, 1, 0, 0, 0]# stop BEFORE this time (exclusive)
+
 timestep_list = [0,0,0, timestep,0,0] # Time step in [Y,M,D,H,M,S]
 
 months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep","Oct","Nov","Dec"]
@@ -141,6 +142,8 @@ seasons = np.array([1,2,3,4,5,6,7,8,9,10,11,12]) # Ending month for three-month 
 dpm = [31,28,31,30,31,30,31,31,30,31,30,31] # days per month (non leap year)
 monthstep = [0,1,0,0,0,0] # A Time step that increases by 1 month [Y,M,D,H,M,S]
 startdate = [1900,1,1] # The starting date for the reanalysis time steps
+endtime_nextmonth = [yend, mend, 1, 0, 0, 0]
+endtime_nextmonth = md.timeAdd(endtime_nextmonth,monthstep) # stop BEFORE this time (exclusive)
 # C17_ExportToCSV
 years = np.arange(ystart, yend+1)
 mos = np.arange(mstart, mend+1)

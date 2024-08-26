@@ -100,8 +100,10 @@ for v in varsi:
         startyears[0], endyears[0] = starttime[0], endtime_nextmonth[0]
 
 # Start at the earliest necessary time for ALL variables of interest
-newstarttime = [np.min(np.array(startyears)[varsi]),1,1,0,0,0]
-newendtime = [np.max(np.array(endyears)[varsi]),1,1,0,0,0]
+# newstarttime = [np.min(np.array(startyears)[varsi]),1,1,0,0,0]
+# newendtime = [np.max(np.array(endyears)[varsi]),1,1,0,0,0]
+newstarttime = [ystart,mstart,1,0,0,0]
+newendtime = [yend,mend,1,0,0,0]
 
 print("Some years may have already been aggregated.\nAggregating for " + str(newstarttime[0]) + "-" + str(newendtime[0]-1) + ".")
 
@@ -126,7 +128,7 @@ while mt != newendtime:
 
     ### LOAD TRACKS ###
     # Load Cyclone/System Tracks
-    cs = pd.read_pickle(inpath_agg+"/"+bboxfull_27+"/"+typ+"Tracks/"+Y+"/"+bboxfull_27+typ.lower()+"tracks"+Y+M+".pkl")
+    cs = pd.read_pickle(inpath_agg+"/"+bboxfull_27+"/"+typ+"Tracks/"+Y+"/"+typ.lower()+"tracks"+Y+M+".pkl")
     # cs = pickle5.load(open(inpath+"/"+bboxnum+"/"+typ+"Tracks/"+Y+"/"+bboxnum+typ.lower()+"tracks"+Y+M+".pkl",'rb'))
 
     ### LIMIT TRACKS & IDS ###
