@@ -13,8 +13,8 @@ timestep = 3 # in hours
 
 # Time Variables
 ystart, yend = 2023, 2023
-mstart, mend = 7, 10
-dstart, dend = 1, 31
+mstart, mend = 8, 9
+dstart, dend = 20, 5
 
 # spatial resolution of the gridded data
 # xsize, ysize = 25000, -25000 # in meters
@@ -33,7 +33,7 @@ bbox = [0, 60, 100, 170] # minlat, maxlat (exclusive), minlon, maxlon (exclusive
 
 # set the time range and interval for plotting the results
 # if not set manually, all the results will be plotted
-plot_time_range = ['2023-01-01', '2023-01-15']
+plot_time_range = ['2023-08-25', '2023-09-02']
 plot_interval = "24H"
 '''*******************************************
 Please adjust the parameter settings for storm detections and trackings
@@ -131,8 +131,8 @@ xsize, ysize = spres * 1000, spres * 1000
 # Time Variables
 starttime = [ystart, mstart, dstart, 0, 0, 0] # Format: [Y,M,D,H,M,S]
 enddate = date(yend, mend, dend) + timedelta(days=1)
-yend, mend, dend = enddate.year, enddate.month, enddate.day
-endtime = [yend, mend, dend, 0, 0, 0]# stop BEFORE this time (exclusive)
+endtime = [enddate.year, enddate.month, enddate.day, 0, 0, 0]
+endtime_nextmonth = [yend, mend+1, 1, 0, 0, 0]# stop BEFORE this time (exclusive)
 timestep_list = [0,0,0, timestep,0,0] # Time step in [Y,M,D,H,M,S]
 
 months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep","Oct","Nov","Dec"]
@@ -143,7 +143,7 @@ monthstep = [0,1,0,0,0,0] # A Time step that increases by 1 month [Y,M,D,H,M,S]
 startdate = [1900,1,1] # The starting date for the reanalysis time steps
 # C17_ExportToCSV
 years = np.arange(ystart, yend+1)
-mos = np.arange(mstart, mend)
+mos = np.arange(mstart, mend+1)
 
 bboxnum_10 = "10"
 bboxmain = "" # The main bbox your subsetting from; usually "" for "all cyclones", otherwise BBox##

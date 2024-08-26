@@ -95,28 +95,28 @@ lats = proj['lat'][:]
 
 kSize = int(kSizekm/spres) # This needs to be the full width ('diameter'), not the half width ('radius') for ndimage filters
 
-print("Step 2. Aggregation requested for " + str(starttime[0]) + "-" + str(endtime[0]-1))
+print("Step 2. Aggregation requested for " + str(starttime[0]) + "-" + str(endtime_nextmonth[0]-1))
 name = version+"_AggregationFields_Monthly_"+vName+".nc"
 if name in priorfiles:
     prior = nc.Dataset(name)
     nextyear = int(np.ceil(prior['time'][:].max()))
     firstyear = int(np.floor(prior['time'][:].min()))
     if starttime[0] < firstyear: # If the desired time range starts before the prior years...
-        if endtime[0] >= firstyear:
+        if endtime_nextmonth[0] >= firstyear:
             startyear, endyear = starttime[0], firstyear
             print("Years " + str(firstyear) + "-"+str(nextyear-1) + " were already aggregated.\nAggregating for " + str(startyear) + "-" + str(endyear-1) + ".")
         else:
-            raise Exception("There is a gap between the ending year requested ("+str(endtime[0]-1)+") and the first year already aggregated ("+str(firstyear)+"). Either increase the ending year or choose a different destination folder.")
-    elif endtime[0] > nextyear: # If the desired range ends after the prior years...
+            raise Exception("There is a gap between the ending year requested ("+str(endtime_nextmonth[0]-1)+") and the first year already aggregated ("+str(firstyear)+"). Either increase the ending year or choose a different destination folder.")
+    elif endtime_nextmonth[0] > nextyear: # If the desired range ends after the prior years...
         if starttime[0] <= nextyear:
-            startyear, endyear = nextyear, endtime[0]
+            startyear, endyear = nextyear, endtime_nextmonth[0]
             print("Years " + str(firstyear) + "-"+str(nextyear-1) + " were already aggregated.\nAggregating for " + str(startyear) + "-" + str(endyear-1) + ".")
         else:
             raise Exception("There is a gap between the last year already aggregated ("+str(nextyear-1)+") and the starting year requested ("+str(starttime[0])+"). Either decrease the starting year or choose a different destination folder.")
     else:
         raise Exception("All requested years are already aggregated.")
 else:
-    startyear, endyear, firstyear, nextyear = starttime[0], endtime[0], starttime[0], endtime[0]
+    startyear, endyear, firstyear, nextyear = starttime[0], endtime_nextmonth[0], starttime[0], endtime_nextmonth[0]
 
 # Start at the earliest necessary time for ALL variables of interest
 newstarttime = [startyear,1,1,0,0,0]
@@ -173,6 +173,7 @@ while mt != newendtime:
 
     # Increment Month
     mt = md.timeAdd(mt,monthstep,lys=1)
+    mt[2] = 1
 
 ### SAVE FILE ###
 print("Step 3. Write to NetCDF")
@@ -225,8 +226,8 @@ else: # Create new data if no prior data existed
     mnc.close()
     os.rename(version+"_AggregationFields_Monthly_"+vName+"_NEW.nc", name) # rename new file to standard name
 
-if (nextyear < endtime[0]) & (firstyear > starttime[0]):
-    print("Completed aggregating " + str(startyear) + "-" + str(endyear-1)+".\nRe-run this script to aggregate " + str(nextyear) + "-" + str(endtime[0]-1) + ".")
+if (nextyear < endtime_nextmonth[0]) & (firstyear > starttime[0]):
+    print("Completed aggregating " + str(startyear) + "-" + str(endyear-1)+".\nRe-run this script to aggregate " + str(nextyear) + "-" + str(endtime_nextmonth[0]-1) + ".")
 else:
     print("Completed aggregating " + str(startyear) + "-" + str(endyear-1)+".")
 

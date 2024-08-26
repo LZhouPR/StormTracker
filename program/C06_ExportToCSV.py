@@ -116,6 +116,7 @@ if typ == "System":
                     trdata['p_grad'] = trdata['p_grad'] / 100 * 1000 * 1000 # to units of hPa / [1000 km]
                     trdata['Dp'] = trdata['Dp'] / 100 # Pa --> hPa
                     trdata['DpDt'] = trdata['DpDt'] / 100 # Pa/day --> hPa/day
+                    print(inpath_system+"/"+bbox+"/CSV"+typ+"/"+Y+"/"+M+"/"+typ+version+bbox+"_"+Y+M+"_"+str(tr.sid)+".csv")
 
                     trdata.to_csv(inpath_system+"/"+bbox+"/CSV"+typ+"/"+Y+"/"+M+"/"+typ+version+bbox+"_"+Y+M+"_"+str(tr.sid)+".csv",index=False,columns=list(trdata.columns[-4:])+list(trdata.columns[:-4]))
 

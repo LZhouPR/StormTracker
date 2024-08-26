@@ -47,7 +47,7 @@ sid, tid, year, month, avguv, maxdsqp, minp, maxdepth, maxpgrad, avgdsqp, avgp, 
 lifespan, trlen, avgarea, mcc, spl1, spl2, spl3, mrg1, mrg2, mrg3, rge2, genReg, lysReg = [[] for i in range(13)]
 
 mt = starttime
-while mt != endtime:
+while mt != endtime_nextmonth:
 # while mt[0] <= endtime[0] and mt[1] <= endtime[1]: # Simon changed
     # Extract date
     Y = str(mt[0])
@@ -62,15 +62,15 @@ while mt != endtime:
     # Load tracks
     cs = pd.read_pickle(inpath_agg+"/"+kind+"/"+Y+"/"+kind.lower()+Y+M+".pkl") # Current Month
     try: # Previous Month
-        cs0 = pd.read_pickle(inpath_agg+"/"+kind+"/"+str(mt0[0])+"/"+bboxfull_27+kind.lower()+str(mt0[0])+mons[mt0[1]-1]+".pkl")
+        cs0 = pd.read_pickle(inpath_agg+"/"+kind+"/"+str(mt0[0])+"/"+bboxfull_27+"/"+kind.lower()+str(mt0[0])+mons[mt0[1]-1]+".pkl")
     except:
         cs0 = []
     try: # Next Month
-        cs2 = pd.read_pickle(inpath_agg+"/"+kind+"/"+str(mt2[0])+"/"+bboxfull_27+kind.lower()+str(mt2[0])+mons[mt2[1]-1]+".pkl")
+        cs2 = pd.read_pickle(inpath_agg+"/"+kind+"/"+str(mt2[0])+"/"+bboxfull_27+"/"+kind.lower()+str(mt2[0])+mons[mt2[1]-1]+".pkl")
         cs2 = [c for c in cs2 if np.isnan(c.ftid) == 0] # Only care about tracks that existed in current month
     except: # For final month in series, forced to used active tracks for partial tabulation of events
         try:
-            cs2 = pd.read_pickle(inpath_agg+"/ActiveTracks/"+str(mt[0])+"/"+bboxfull_27+"activetracks"+str(mt[0])+mons[mt[1]-1]+".pkl")
+            cs2 = pd.read_pickle(inpath_agg+"/ActiveTracks/"+str(mt[0])+"/"+bboxfull_27+"/activetracks"+str(mt[0])+mons[mt[1]-1]+".pkl")
             cs2, cs = md.cTrack2sTrack(cs2,cs,dateref,rg)
         except:
             cs2 = []
@@ -152,6 +152,7 @@ while mt != endtime:
         lysReg.append( regs[list(tr.data.y)[-1],list(tr.data.x)[-1]] )
 
     mt = md.timeAdd(mt,monthstep)
+    mt[2] = 1
 
 # Construct Pandas Dataframe
 if kind1 == 'System':
@@ -192,7 +193,9 @@ except:
     os.mkdir(inpath_agg+"/Aggregation"+kind1)
     os.chdir(inpath_agg+"/Aggregation"+kind1)
 
-YY = str(starttime[0]) + "_" + str(md.timeAdd(endtime,[0,-1,0,0,0,0])[0])
+YY = str(starttime[0]) + "_" + str(md.timeAdd(endtime_nextmonth,[0,-1,0,0,0,0])[0])
 pdf.to_csv(bboxfull_27+"_"+kind+"Events_"+version+"_"+YY+V+".csv",index=False)
+
+# pdf.to_csv(bboxfull_27+"/"+kind+"Events/"+version+"/"+YY+V+".csv",index=False)
 
 print(f"{current_file} has finished")

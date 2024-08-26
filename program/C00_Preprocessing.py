@@ -40,9 +40,9 @@ ds = ds.sortby('longitude')
 ds = ds.sel(longitude = np.logical_and(ds.longitude >= bbox[2], ds.longitude < bbox[3]))
 ds = ds.sel(latitude = np.logical_and(ds.latitude >= bbox[0], ds.latitude < bbox[1]))
 
-
+enddate = date(yend, mend, dend) + timedelta(days=1)
 # ds = ds.isel(time = (pd.to_datetime("2023-01-01") <= pd.Series(ds.time.values)) & (pd.Series(ds.time.values) < pd.to_datetime("2023-02-01")))
-ds = ds.isel(time = ("{}-{}-{}".format(ystart, mstart, dstart) <= pd.Series(ds.time.values)) & (pd.Series(ds.time.values) < ("{}-{}-{}".format(yend, mend, dend))))
+ds = ds.isel(time = ("{}-{}-{}".format(ystart, mstart, dstart) <= pd.Series(ds.time.values)) & (pd.Series(ds.time.values) < ("{}-{}-{}".format(enddate.year, enddate.month, enddate.day))))
 
 for month, ds_month in ds.groupby('time.month'):
     timestamps = pd.to_datetime(ds_month.time.values)

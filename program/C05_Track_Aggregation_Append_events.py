@@ -73,9 +73,9 @@ lats = proj['lat'][:]
 
 kSize = int(kSizekm/spres) # This needs to be the full width ('diameter'), not the half width ('radius') for ndimage filters
 
-print("Step 2. Aggregation requested for " + str(starttime[0]) + "-" + str(endtime[0]-1))
-startyears, endyears = [starttime[0] for i in vNames], [endtime[0] for i in vNames]
-firstyears, nextyears = [starttime[0] for i in vNames], [endtime[0] for i in vNames]
+print("Step 2. Aggregation requested for " + str(starttime[0]) + "-" + str(endtime_nextmonth[0]-1))
+startyears, endyears = [starttime[0] for i in vNames], [endtime_nextmonth[0] for i in vNames]
+firstyears, nextyears = [starttime[0] for i in vNames], [endtime_nextmonth[0] for i in vNames]
 for v in varsi:
     name = version+"_AggregationFields_Monthly_"+vNames[v]+".nc"
     if name in priorfiles:
@@ -86,19 +86,19 @@ for v in varsi:
         firstyears[v] = int(np.floor(prior['time'][:].min()))
 
         if starttime[0] < firstyears[v]: # If the desired time range starts before the prior years...
-            if endtime[0] >= firstyears[v]:
+            if endtime_nextmonth[0] >= firstyears[v]:
                 startyears[v], endyears[v] = starttime[0], firstyears[v]
             else:
-                raise Exception("There is a gap between the ending year requested ("+str(endtime[0]-1)+") and the first year already aggregated ("+str(firstyears[v])+"). Either increase the ending year or choose a different destination folder.")
-        elif endtime[0] > nextyears[v]: # If the desired range ends after the prior years...
+                raise Exception("There is a gap between the ending year requested ("+str(endtime_nextmonth[0]-1)+") and the first year already aggregated ("+str(firstyears[v])+"). Either increase the ending year or choose a different destination folder.")
+        elif endtime_nextmonth[0] > nextyears[v]: # If the desired range ends after the prior years...
             if starttime[0] <= nextyears[v]:
-                startyears[v], endyears[v] = nextyears[v], endtime[0]
+                startyears[v], endyears[v] = nextyears[v], endtime_nextmonth[0]
             else:
                 raise Exception("There is a gap between the last year already aggregated ("+str(nextyears[v]-1)+") and the starting year requested ("+str(starttime[0])+"). Either decrease the starting year or choose a different destination folder.")
         else:
             raise Exception("All requested years are already aggregated.")
     else:
-        startyears[0], endyears[0] = starttime[0], endtime[0]
+        startyears[0], endyears[0] = starttime[0], endtime_nextmonth[0]
 
 # Start at the earliest necessary time for ALL variables of interest
 newstarttime = [np.min(np.array(startyears)[varsi]),1,1,0,0,0]
@@ -165,6 +165,7 @@ while mt != newendtime:
 
     # Increment Month
     mt = md.timeAdd(mt,monthstep,lys=1)
+    mt[2] = 1
 
 ### SAVE FILE ###
 print("Step 3. Write to NetCDF")
@@ -219,7 +220,7 @@ for v in varsi:
 
             else:
                 mnc.close()
-                raise Exception("Times are misaligned. Requested Time Range: " + str(starttime) + "-" + str(endtime) + ". Processed Time Range: " + str(newstarttime) + "-" + str(newendtime) + ".")
+                raise Exception("Times are misaligned. Requested Time Range: " + str(starttime) + "-" + str(endtime_nextmonth) + ". Processed Time Range: " + str(newstarttime) + "-" + str(newendtime) + ".")
 
             prior.close(), mnc.close()
             os.remove(name) # Remove old file
@@ -230,7 +231,7 @@ for v in varsi:
         mnc.close()
         os.rename(version+"_AggregationFields_Monthly_"+vNames[v]+"_NEW.nc", name) # rename new file to standard name
 
-if (newendtime[0] < endtime[0]) & (max(nextyears) < endtime[0]):
+if (newendtime[0] < endtime_nextmonth[0]) & (max(nextyears) < endtime_nextmonth[0]):
     print("Completed aggregating " + str(newstarttime[0]) + "-" + str(newendtime[0]-1)+".\nRe-run this script to aggregate any time after " + str(max(nextyears[v],newendtime[0])-1) + ".")
 else:
     print("Completed aggregating " + str(newstarttime[0]) + "-" + str(newendtime[0]-1)+".")

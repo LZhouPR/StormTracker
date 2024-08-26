@@ -76,7 +76,7 @@ except:
     os.mkdir("ActiveTracks")
     os.mkdir("SystemTracks")
 
-for y in range(starttime[0],endtime[0]+1):
+for y in range(starttime[0],endtime_nextmonth[0]+1):
     Y = str(y)
 
     # Cyclone Tracks
@@ -221,7 +221,7 @@ while t != endtime:
         except:
             cflist = []
 
-        if t != endtime:
+        if t != endtime_nextmonth:
             # Load netcdf for next month
             ncf = nc.Dataset(inpath_detect+"/"+ra+"_EASE2_N0_"+str(spres)+"km_"+var+"_Hourly_"+str(t[0])+md.dd[t[1]-1]+".nc")
             tlist = ncf['time'][:].data

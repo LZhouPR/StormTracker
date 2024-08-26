@@ -41,7 +41,8 @@ Main Analysis
 
 mt = starttime
 # current_day = pd.to_datetime(f"{mt[0]}-{mt[1]}-{mt[2]}")
-while mt != endtime:
+while mt != endtime_nextmonth:
+
 # while mt[0] <= endtime[0] and mt[1] <= endtime[1]: # Simon changed
     # Extract date
     Y = str(mt[0])
@@ -71,7 +72,7 @@ while mt != endtime:
 
     # Increment Time Step
     mt = md.timeAdd(mt,monthstep)
-    # mt[2] = dend # Simon: set that the day of the following month to be the last day 
+    mt[2] = 1 # Simon: set that the day of the following month to be the last day 
 
 
 # print('Elapsed time:',round(perf_counter()-start,2),'seconds')

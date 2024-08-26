@@ -72,7 +72,7 @@ except:
 
 # Main Loop
 mt = starttime
-while mt != endtime:
+while mt != endtime_nextmonth:
 # while mt[0] <= endtime[0] and mt[1] <= endtime[1]: # Simon changed
     # Extract date
     Y = str(mt[0])
@@ -108,10 +108,12 @@ while mt != endtime:
         os.mkdir(inpath_system+"/BBox"+bboxnum_27+"/"+typ+"Tracks/"+Y)
         os.chdir(inpath_system+"/BBox"+bboxnum_27+"/"+typ+"Tracks/"+Y)
 
-    pd.to_pickle(trs,"BBox"+bboxnum_27+typ.lower()+"tracks"+Y+M+".pkl")
+    # pd.to_pickle(trs,"BBox"+bboxnum_27+typ.lower()+"tracks"+Y+M+".pkl")
+    pd.to_pickle(trs, typ.lower()+"tracks"+Y+M+".pkl")
 
     # Increment Month
     mt = md.timeAdd(mt,monthstep)
+    mt[2] = 1
 
 # # Print elapsed time
 # print('Elapsed time:',round(clock()-start,2),'seconds')
