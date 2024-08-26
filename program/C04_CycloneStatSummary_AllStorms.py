@@ -47,8 +47,8 @@ sid, tid, year, month, avguv, maxdsqp, minp, maxdepth, maxpgrad, avgdsqp, avgp, 
 lifespan, trlen, avgarea, mcc, spl1, spl2, spl3, mrg1, mrg2, mrg3, rge2, genReg, lysReg = [[] for i in range(13)]
 
 mt = starttime
-# while mt != endtime:
-while mt[0] <= endtime[0] and mt[1] <= endtime[1]: # Simon changed
+while mt != endtime:
+# while mt[0] <= endtime[0] and mt[1] <= endtime[1]: # Simon changed
     # Extract date
     Y = str(mt[0])
     MM = months[mt[1]-1]

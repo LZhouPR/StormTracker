@@ -75,8 +75,8 @@ except:
 
 # Main Loop
 mt = starttime
-# while mt != endtime:
-while mt[0] <= endtime[0] and mt[1] <= endtime[1]: # Simon changed
+while mt != endtime:
+# while mt[0] <= endtime[0] and mt[1] <= endtime[1]: # Simon changed
     # Extract date
     Y = str(mt[0])
     MM = months[mt[1]-1]
@@ -84,7 +84,7 @@ while mt[0] <= endtime[0] and mt[1] <= endtime[1]: # Simon changed
     print(" " + Y + " - " + MM)
 
     # Load Tracks
-    cs = pd.read_pickle(inpath_system+"/"+bboxmain+"/"+typ+"Tracks/"+Y+"/"+bboxmain+typ.lower()+"tracks"+Y+M+".pkl")
+    cs = pd.read_pickle(inpath_system+bboxmain+"/"+typ+"Tracks/"+Y+"/"+bboxmain+typ.lower()+"tracks"+Y+M+".pkl")
     # cs = pickle5.load(open(inpath_system+"/"+bboxmain+"/"+typ+"Tracks/"+Y+"/"+bboxmain+typ.lower()+"tracks"+Y+M+".pkl",'rb'))
     cs = [tr for tr in cs if ((tr.lifespan() >= minlifespan) and (tr.trackLength() >= mintracklength)) and (maxDistFromGenPnt(tr.data) >= mindisplacement)]
 

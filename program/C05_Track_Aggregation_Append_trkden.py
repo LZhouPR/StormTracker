@@ -99,7 +99,6 @@ print("Step 2. Aggregation requested for " + str(starttime[0]) + "-" + str(endti
 name = version+"_AggregationFields_Monthly_"+vName+".nc"
 if name in priorfiles:
     prior = nc.Dataset(name)
-    breakpoint()
     nextyear = int(np.ceil(prior['time'][:].max()))
     firstyear = int(np.floor(prior['time'][:].min()))
     if starttime[0] < firstyear: # If the desired time range starts before the prior years...

@@ -4,6 +4,7 @@ import pandas as pd
 '''*******************************************
 nc file variables you need to change
 *******************************************'''
+ncname = "era5_2023"
 ncvar_p = "msl" # pressure variable in the nc file
 nctvar = "time" # time dimension
 ncext = '.nc' # file format
@@ -12,13 +13,13 @@ timestep = 3 # in hours
 
 # Time Variables
 ystart, yend = 2023, 2023
-mstart, mend = 1, 1
+mstart, mend = 7, 10
 dstart, dend = 1, 31
 
 # spatial resolution of the gridded data
 # xsize, ysize = 25000, -25000 # in meters
 
-inpath_system = "E:/Simon/tracking/alexcrawford0927/final_version/Cressida"
+inpath = "E:/Simon/tracking/alexcrawford0927/final_version/Cressida"
 
 ra = "ERA5" # put your file within this folder
 # ras = [f"ERA5_em{i}" for i in range(1, 51+1)] # for ensemble members
@@ -28,8 +29,12 @@ var = "SLP"
 
 # mask the area of interest in C03
 # not necessary to change
-bbox = [0, 90, -180, 180] # minlat, maxlat, minlon, maxlon
+bbox = [0, 60, 100, 170] # minlat, maxlat (exclusive), minlon, maxlon (exclusive)
 
+# set the time range and interval for plotting the results
+# if not set manually, all the results will be plotted
+plot_time_range = ['2023-01-01', '2023-01-15']
+plot_interval = "24H"
 '''*******************************************
 Please adjust the parameter settings for storm detections and trackings
 *******************************************'''
@@ -126,7 +131,8 @@ xsize, ysize = spres * 1000, spres * 1000
 # Time Variables
 starttime = [ystart, mstart, dstart, 0, 0, 0] # Format: [Y,M,D,H,M,S]
 enddate = date(yend, mend, dend) + timedelta(days=1)
-endtime = [enddate.year, enddate.month, enddate.day, 0, 0, 0]# stop BEFORE this time (exclusive)
+yend, mend, dend = enddate.year, enddate.month, enddate.day
+endtime = [yend, mend, dend, 0, 0, 0]# stop BEFORE this time (exclusive)
 timestep_list = [0,0,0, timestep,0,0] # Time step in [Y,M,D,H,M,S]
 
 months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep","Oct","Nov","Dec"]
@@ -137,7 +143,7 @@ monthstep = [0,1,0,0,0,0] # A Time step that increases by 1 month [Y,M,D,H,M,S]
 startdate = [1900,1,1] # The starting date for the reanalysis time steps
 # C17_ExportToCSV
 years = np.arange(ystart, yend+1)
-mos = np.arange(mstart, mend+1)
+mos = np.arange(mstart, mend)
 
 bboxnum_10 = "10"
 bboxmain = "" # The main bbox your subsetting from; usually "" for "all cyclones", otherwise BBox##
@@ -148,18 +154,18 @@ bboxfull_27 = "BBox" + bboxnum_27
 """
 Path Variables
 """
-inpath_reproj = inpath_system+"/"+ra+"/"+var #
-outpath_reproj = inpath_system + "/" +ra+"/"+var+"_EASE2_N0_"+str(int(xsize/1000))+"km" # file path for reprojection nc file
-suppath_reproj = inpath_system+"/Projections"
+inpath_reproj = inpath+"/"+ra+"/"+var #
+outpath_reproj = inpath + "/" +ra+"/"+var+"_EASE2_N0_"+str(int(xsize/1000))+"km" # file path for reprojection nc file
+suppath_reproj = inpath+"/Projections"
 version = "13_2" # Detection Version
 
 # vert = '' # Original: Ptest # Tracking Version
-inpath_detect = inpath_system + "/" + ra + "/SLP_EASE2_N0_"+str(spres) + "km"
-outpath_detect = inpath_system + "/CycloneTracking_" + ra
-suppath_detect = inpath_system + "/Projections/EASE2_N0_" + str(spres) + "km_Projection.nc"
+inpath_detect = inpath + "/" + ra + "/SLP_EASE2_N0_"+str(spres) + "km"
+outpath_detect = inpath + "/CycloneTracking_" + ra
+suppath_detect = inpath + "/Projections/EASE2_N0_" + str(spres) + "km_Projection.nc"
 # system detection
 # subset = "" # use "" if performing on all cyclones
-regpath = inpath_system+"/Projections/EASE2_N0_25km_GenesisRegions.nc"
+regpath = inpath+"/Projections/EASE2_N0_25km_GenesisRegions.nc"
 inpath_system = f"{outpath_detect}/tracking13_2"
 inpath_agg = inpath_system 
 # outpath_agg = inpath_agg + "/" + bboxfull_27
@@ -191,6 +197,9 @@ agg = [-1,-1,-1,-1,-1]
 
 # C06B
 # subset2 = '' # '_DeepeningDsqP' + ''
+
+# C99
+plot_directory = 'fig'
 
 
 

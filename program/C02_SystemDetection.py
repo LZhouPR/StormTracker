@@ -34,8 +34,6 @@ Set up Environment
 *******************************************'''
 # print("Setting up environment.")
 
-outpath_agg = inpath_system
-
 '''*******************************************
 Main Analysis
 *******************************************'''
@@ -43,8 +41,8 @@ Main Analysis
 
 mt = starttime
 # current_day = pd.to_datetime(f"{mt[0]}-{mt[1]}-{mt[2]}")
-# while mt != endtime:
-while mt[0] <= endtime[0] and mt[1] <= endtime[1]: # Simon changed
+while mt != endtime:
+# while mt[0] <= endtime[0] and mt[1] <= endtime[1]: # Simon changed
     # Extract date
     Y = str(mt[0])
     M = mons[mt[1]-1]

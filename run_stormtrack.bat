@@ -8,6 +8,7 @@ set start_time=%time%
 
 echo start time: %start_time%
 rem Run the Python script
+python C00_Preprocessing.py
 python C01_Reprojection.py
 python C02_CycloneDetection.py
 python C02_SystemDetection.py
@@ -19,6 +20,7 @@ python C05_Track_Aggregation_Append_intensity.py
 python C05_Track_Aggregation_Append_rates.py 
 python C05_Track_Aggregation_Append_trkden.py
 python C06_ExportToCSV.py
+python C99_PlotResults.py
 
 echo "Completed all"
 
